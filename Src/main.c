@@ -104,6 +104,7 @@ int main(void)
       zval = buffer[2]/1000;
       //HAL_UART_Transmit(&huart1, buffer , 3, 1000);
       HAL_Delay(1);
+
   }
   /* USER CODE END 3 */
 
