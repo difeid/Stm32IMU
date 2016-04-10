@@ -46,7 +46,6 @@ UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-uint8_t id = 0x00;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -60,14 +59,15 @@ static void MX_USART1_UART_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint8_t id = 0x00;
+  float buffer[3];
+  float xval,yval,zval = 0x00;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -96,8 +96,14 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
       BSP_LED_Toggle(LED_GREEN);
-      HAL_Delay(500);
       id = BSP_GYRO_ReadID();
+
+      BSP_GYRO_GetXYZ(buffer);
+      xval = buffer[0]/1000;
+      yval = buffer[1]/1000;
+      zval = buffer[2]/1000;
+      //HAL_UART_Transmit(&huart1, buffer , 3, 1000);
+      HAL_Delay(1);
   }
   /* USER CODE END 3 */
 
