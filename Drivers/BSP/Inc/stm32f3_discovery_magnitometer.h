@@ -89,7 +89,7 @@ MAGNITO_StatusTypeDef;
   */
 /* Acc functions */  
 uint8_t   BSP_MAGNITO_Init(void);
-void      BSP_MAGNITO_GetXYZ(float* pDataXYZ);
+void      BSP_MAGNITO_GetXYZ(float *pDataXYZ);
 
 /**
   * @}

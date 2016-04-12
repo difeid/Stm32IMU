@@ -403,20 +403,20 @@
  * @defgroup Magnetometer_Sensitivity
  * @{
  */
-#define LSM303DLHC_M_SENSITIVITY_XY_1_3Ga     ((uint8_t)1100)  /*!< magnetometer X Y axes sensitivity for 1.3 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_XY_1_9Ga     ((uint8_t)855)   /*!< magnetometer X Y axes sensitivity for 1.9 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_XY_2_5Ga     ((uint8_t)670)   /*!< magnetometer X Y axes sensitivity for 2.5 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_XY_4Ga       ((uint8_t)450)   /*!< magnetometer X Y axes sensitivity for 4 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_XY_4_7Ga     ((uint8_t)400)   /*!< magnetometer X Y axes sensitivity for 4.7 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_XY_5_6Ga     ((uint8_t)330)   /*!< magnetometer X Y axes sensitivity for 5.6 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_XY_8_1Ga     ((uint8_t)230)   /*!< magnetometer X Y axes sensitivity for 8.1 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_Z_1_3Ga      ((uint8_t)980)   /*!< magnetometer Z axis sensitivity for 1.3 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_Z_1_9Ga      ((uint8_t)760)   /*!< magnetometer Z axis sensitivity for 1.9 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_Z_2_5Ga      ((uint8_t)600)   /*!< magnetometer Z axis sensitivity for 2.5 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_Z_4Ga        ((uint8_t)400)   /*!< magnetometer Z axis sensitivity for 4 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_Z_4_7Ga      ((uint8_t)355)   /*!< magnetometer Z axis sensitivity for 4.7 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_Z_5_6Ga      ((uint8_t)295)   /*!< magnetometer Z axis sensitivity for 5.6 Ga full scale [LSB/Ga] */
-#define LSM303DLHC_M_SENSITIVITY_Z_8_1Ga      ((uint8_t)205)   /*!< magnetometer Z axis sensitivity for 8.1 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_XY_1_3Ga     ((uint16_t)1100)  /*!< magnetometer X Y axes sensitivity for 1.3 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_XY_1_9Ga     ((uint16_t)855)   /*!< magnetometer X Y axes sensitivity for 1.9 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_XY_2_5Ga     ((uint16_t)670)   /*!< magnetometer X Y axes sensitivity for 2.5 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_XY_4Ga       ((uint16_t)450)   /*!< magnetometer X Y axes sensitivity for 4 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_XY_4_7Ga     ((uint16_t)400)   /*!< magnetometer X Y axes sensitivity for 4.7 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_XY_5_6Ga     ((uint16_t)330)   /*!< magnetometer X Y axes sensitivity for 5.6 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_XY_8_1Ga     ((uint16_t)230)   /*!< magnetometer X Y axes sensitivity for 8.1 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_Z_1_3Ga      ((uint16_t)980)   /*!< magnetometer Z axis sensitivity for 1.3 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_Z_1_9Ga      ((uint16_t)760)   /*!< magnetometer Z axis sensitivity for 1.9 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_Z_2_5Ga      ((uint16_t)600)   /*!< magnetometer Z axis sensitivity for 2.5 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_Z_4Ga        ((uint16_t)400)   /*!< magnetometer Z axis sensitivity for 4 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_Z_4_7Ga      ((uint16_t)355)   /*!< magnetometer Z axis sensitivity for 4.7 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_Z_5_6Ga      ((uint16_t)295)   /*!< magnetometer Z axis sensitivity for 5.6 Ga full scale [LSB/Ga] */
+#define LSM303DLHC_M_SENSITIVITY_Z_8_1Ga      ((uint16_t)205)   /*!< magnetometer Z axis sensitivity for 8.1 Ga full scale [LSB/Ga] */
 /**
  * @}
  */
