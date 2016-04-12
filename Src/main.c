@@ -33,12 +33,12 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal.h"
 #include "usb_device.h"
-#include "stm32f3_discovery.h"
-#include "stm32f3_discovery_accelerometer.h"
-#include "stm32f3_discovery_gyroscope.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "stm32f3_discovery.h"
+#include "stm32f3_discovery_gyroscope.h"
+#include "stm32f3_discovery_magnitometer.h"
+#include "stm32f3_discovery_accelerometer.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -65,9 +65,15 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  uint8_t id = 0x00;
-  float buffer[3];
-  float xval,yval,zval = 0x00;
+  float gyro_buffer[3] = {0};
+  float gyro_x,gyro_y,gyro_z = 0;
+
+  float acc_buffer[3] = {0};
+  float acc_x, acc_y, acc_z = 0;
+
+  float mag_buffer[3] = {0};
+  float mag_x, mag_y, mag_z = 0;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -85,6 +91,8 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
   BSP_GYRO_Init();
+  BSP_ACCELERO_Init();
+  BSP_MAGNITO_Init();
   BSP_LED_Init(LED_GREEN);
   /* USER CODE END 2 */
 
@@ -96,15 +104,23 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
       BSP_LED_Toggle(LED_GREEN);
-      id = BSP_GYRO_ReadID();
 
-      BSP_GYRO_GetXYZ(buffer);
-      xval = buffer[0]/1000;
-      yval = buffer[1]/1000;
-      zval = buffer[2]/1000;
-      //HAL_UART_Transmit(&huart1, buffer , 3, 1000);
-      HAL_Delay(1);
+      BSP_GYRO_GetXYZ(gyro_buffer);
+      gyro_x = gyro_buffer[0];
+      gyro_y = gyro_buffer[1];
+      gyro_z = gyro_buffer[2];
 
+      BSP_ACCELERO_GetXYZ(acc_buffer);
+      acc_x = acc_buffer[1];
+      acc_y = -acc_buffer[0];
+      acc_z = acc_buffer[2];
+
+      BSP_MAGNITO_GetXYZ(mag_buffer);
+      mag_x = mag_buffer[1];
+      mag_y = -mag_buffer[0];
+      mag_z = mag_buffer[2];
+
+      HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 
