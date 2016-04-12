@@ -130,21 +130,21 @@ uint8_t BSP_MAGNITO_Init(void)
   *                 pDataXYZ[0] = X axis, pDataXYZ[1] = Y axis, pDataXYZ[2] = Z axis
 * @retval None
 */
-void BSP_MAGNITO_GetXYZ(float *pDataXYZ)
+void BSP_MAGNITO_GetXYZ(float* pDataXYZ)
 {
-  uint8_t buffer[6];
-  int16_t pnRawData[3];
+  uint8_t buffer[6] = {0};
+  int16_t pnRawData[3] = {0};
   uint8_t CTRLB = 0;
   uint8_t i = 0;
-  uint8_t Magn_Sensitivity_XY = 0, Magn_Sensitivity_Z = 0;
+  float Magn_Sensitivity_XY = 1.0f, Magn_Sensitivity_Z = 1.0f;
 
   CTRLB = LSM303DLHC_MagGetDataStatus();
-  buffer[0] = COMPASSACCELERO_IO_Read(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_L_M);
-  buffer[1] = COMPASSACCELERO_IO_Read(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_H_M);
-  buffer[2] = COMPASSACCELERO_IO_Read(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_L_M);
-  buffer[3] = COMPASSACCELERO_IO_Read(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Y_H_M);
-  buffer[4] = COMPASSACCELERO_IO_Read(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_L_M);
-  buffer[5] = COMPASSACCELERO_IO_Read(ACC_I2C_ADDRESS, LSM303DLHC_OUT_Z_H_M);
+  buffer[0] = COMPASSACCELERO_IO_Read(MAG_I2C_ADDRESS, LSM303DLHC_OUT_X_L_M);
+  buffer[1] = COMPASSACCELERO_IO_Read(MAG_I2C_ADDRESS, LSM303DLHC_OUT_X_H_M);
+  buffer[2] = COMPASSACCELERO_IO_Read(MAG_I2C_ADDRESS, LSM303DLHC_OUT_Y_L_M);
+  buffer[3] = COMPASSACCELERO_IO_Read(MAG_I2C_ADDRESS, LSM303DLHC_OUT_Y_H_M);
+  buffer[4] = COMPASSACCELERO_IO_Read(MAG_I2C_ADDRESS, LSM303DLHC_OUT_Z_L_M);
+  buffer[5] = COMPASSACCELERO_IO_Read(MAG_I2C_ADDRESS, LSM303DLHC_OUT_Z_H_M);
 
   /* Switch the sensitivity set in the CRTLB*/
   switch(CTRLB & 0xE0)
@@ -181,7 +181,7 @@ void BSP_MAGNITO_GetXYZ(float *pDataXYZ)
 
   for(i=0; i<3; i++)
   {
-     pnRawData[i]=((int16_t)((uint16_t)buffer[2*i+1] << 8) + buffer[2*i]);
+     pnRawData[i]=(int16_t)(((uint16_t)buffer[2*i+1] << 8) + buffer[2*i]);
   }
 
   pDataXYZ[0] = (float)(pnRawData[0] / Magn_Sensitivity_XY);

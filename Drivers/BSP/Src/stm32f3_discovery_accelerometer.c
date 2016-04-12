@@ -176,7 +176,7 @@ void BSP_ACCELERO_Reset(void)
   *                 pDataXYZ[0] = X axis, pDataXYZ[1] = Y axis, pDataXYZ[2] = Z axis
 * @retval None
 */
-void BSP_ACCELERO_GetXYZ(float *pDataXYZ)
+void BSP_ACCELERO_GetXYZ(float* pDataXYZ)
 {
   if(AccelerometerDrv->GetXYZ!= NULL)
   {   

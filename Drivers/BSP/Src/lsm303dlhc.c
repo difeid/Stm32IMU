@@ -211,9 +211,9 @@ void LSM303DLHC_AccFilterCmd(uint8_t HighPassFilterState)
   */
 void LSM303DLHC_AccReadXYZ(float* pData)
 {
-  int16_t pnRawData[3];
-  uint8_t ctrlx[2]={0,0};
-  int8_t buffer[6];
+  int16_t pnRawData[3] = {0};
+  uint8_t ctrlx[2] = {0,0};
+  int8_t buffer[6] = {0};
   uint8_t i = 0;
   uint8_t sensitivity = LSM303DLHC_ACC_SENSITIVITY_2G;
   
@@ -234,14 +234,14 @@ void LSM303DLHC_AccReadXYZ(float* pData)
   {
     for(i=0; i<3; i++)
     {
-      pnRawData[i]=((int16_t)((uint16_t)buffer[2*i+1] << 8) + buffer[2*i]);
+      pnRawData[i]=(int16_t)((((uint16_t)buffer[2*i+1] << 8) + buffer[2*i]) >> 4);
     }
   }
   else /* Big Endian Mode */
   {
     for(i=0; i<3; i++)
     {
-      pnRawData[i]=((int16_t)((uint16_t)buffer[2*i] << 8) + buffer[2*i+1]);
+      pnRawData[i]=(int16_t)((((uint16_t)buffer[2*i] << 8) + buffer[2*i+1]) >> 4);
     }
   }
   
@@ -266,7 +266,7 @@ void LSM303DLHC_AccReadXYZ(float* pData)
   /* Obtain the mg value for the three axis */
   for(i=0; i<3; i++)
   {
-    pData[i]=(float)(pnRawData[i] * sensitivity) / 1000;
+    pData[i]=(float)(pnRawData[i] * sensitivity) / 1000.0f;
   }
 }
 
@@ -591,7 +591,7 @@ uint8_t LSM303DLHC_MagGetDataStatus(void)
   uint8_t tmpreg;
   
   /* Read Mag STATUS register */
-  tmpreg = COMPASSACCELERO_IO_Read(MAG_I2C_ADDRESS, LSM303DLHC_SR_REG_M);
+  tmpreg = COMPASSACCELERO_IO_Read(MAG_I2C_ADDRESS, LSM303DLHC_CRB_REG_M);
   
   return tmpreg;
 }
