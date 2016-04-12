@@ -252,16 +252,16 @@
 /** @defgroup High_Pass_CUT OFF_Frequency 
   * @{
   */   
-#define L3GD20_HPFCF_0              0x00
-#define L3GD20_HPFCF_1              0x01
-#define L3GD20_HPFCF_2              0x02
-#define L3GD20_HPFCF_3              0x03
-#define L3GD20_HPFCF_4              0x04
-#define L3GD20_HPFCF_5              0x05
-#define L3GD20_HPFCF_6              0x06
-#define L3GD20_HPFCF_7              0x07
-#define L3GD20_HPFCF_8              0x08
-#define L3GD20_HPFCF_9              0x09
+#define L3GD20_HPFCF_0                     ((uint8_t)0x00)
+#define L3GD20_HPFCF_1                     ((uint8_t)0x01)
+#define L3GD20_HPFCF_2                     ((uint8_t)0x02)
+#define L3GD20_HPFCF_3                     ((uint8_t)0x03)
+#define L3GD20_HPFCF_4                     ((uint8_t)0x04)
+#define L3GD20_HPFCF_5                     ((uint8_t)0x05)
+#define L3GD20_HPFCF_6                     ((uint8_t)0x06)
+#define L3GD20_HPFCF_7                     ((uint8_t)0x07)
+#define L3GD20_HPFCF_8                     ((uint8_t)0x08)
+#define L3GD20_HPFCF_9                     ((uint8_t)0x09)
 /**
   * @}
   */
