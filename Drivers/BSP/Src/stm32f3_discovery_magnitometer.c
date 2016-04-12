@@ -110,7 +110,7 @@ uint8_t BSP_MAGNITO_Init(void)
   /* MEMS configuration ------------------------------------------------------*/
     /* Configure MEMS magnetometer main parameters: temp, working mode, full Scale and Data rate */
     LSM303DLHC_InitStructure.Temperature_Sensor = LSM303DLHC_TEMPSENSOR_DISABLE;
-    LSM303DLHC_InitStructure.MagOutput_DataRate =LSM303DLHC_ODR_220_HZ;
+    LSM303DLHC_InitStructure.MagOutput_DataRate =LSM303DLHC_ODR_75_HZ;
     LSM303DLHC_InitStructure.MagFull_Scale = LSM303DLHC_FS_4_0_GA;
     LSM303DLHC_InitStructure.Working_Mode = LSM303DLHC_CONTINUOS_CONVERSION;
     LSM303DLHC_MagInit(&LSM303DLHC_InitStructure);
@@ -130,13 +130,13 @@ uint8_t BSP_MAGNITO_Init(void)
   *                 pDataXYZ[0] = X axis, pDataXYZ[1] = Y axis, pDataXYZ[2] = Z axis
 * @retval None
 */
-void BSP_MAGNITO_GetXYZ(int16_t *pDataXYZ)
+void BSP_MAGNITO_GetXYZ(float *pDataXYZ)
 {
   uint8_t buffer[6];
   int16_t pnRawData[3];
   uint8_t CTRLB = 0;
   uint8_t i = 0;
-  float Magn_Sensitivity_XY = 0, Magn_Sensitivity_Z = 0;
+  uint8_t Magn_Sensitivity_XY = 0, Magn_Sensitivity_Z = 0;
 
   CTRLB = LSM303DLHC_MagGetDataStatus();
   buffer[0] = COMPASSACCELERO_IO_Read(ACC_I2C_ADDRESS, LSM303DLHC_OUT_X_L_M);
@@ -184,9 +184,9 @@ void BSP_MAGNITO_GetXYZ(int16_t *pDataXYZ)
      pnRawData[i]=((int16_t)((uint16_t)buffer[2*i+1] << 8) + buffer[2*i]);
   }
 
-  pDataXYZ[0]=(pnRawData[0] * Magn_Sensitivity_XY);
-  pDataXYZ[1]=(pnRawData[1] * Magn_Sensitivity_XY);
-  pDataXYZ[2]=(pnRawData[2] * Magn_Sensitivity_Z);
+  pDataXYZ[0] = (float)(pnRawData[0] / Magn_Sensitivity_XY);
+  pDataXYZ[1] = (float)(pnRawData[1] / Magn_Sensitivity_XY);
+  pDataXYZ[2] = (float)(pnRawData[2] / Magn_Sensitivity_Z);
 }
 
 
