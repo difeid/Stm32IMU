@@ -50,7 +50,7 @@
 									<listOptionValue builtIn="false" value="STM32F303xC"/>
 								</option>
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other.2071409364" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string"/>
-								<option id="gnu.c.compiler.option.dialect.std.560359035" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.dialect.std.560359035" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.632865839" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1491615447" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
 							</tool>
@@ -62,7 +62,7 @@
 								<option id="fr.ac6.managedbuild.tool.gnu.cross.c.linker.script.1060446802" name="Linker Script (-T)" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.linker.script" value="../STM32F303VCTx_FLASH.ld" valueType="string"/>
 								<option id="gnu.c.link.option.libs.316295508" name="Libraries (-l)" superClass="gnu.c.link.option.libs"/>
 								<option id="gnu.c.link.option.paths.1055672747" name="Library search path (-L)" superClass="gnu.c.link.option.paths"/>
-								<option id="gnu.c.link.option.ldflags.1106319411" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="-specs=nosys.specs -specs=nano.specs" valueType="string"/>
+								<option id="gnu.c.link.option.ldflags.1106319411" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="-specs=nosys.specs -specs=nano.specs -u _printf_float" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1623801103" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

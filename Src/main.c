@@ -66,14 +66,13 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   float gyro_buffer[3] = {0};
-  float gyro_x,gyro_y,gyro_z = 0;
+  float gyro_x,gyro_y,gyro_z = .0f;
 
   float acc_buffer[3] = {0};
-  float acc_x, acc_y, acc_z = 0;
+  float acc_x, acc_y, acc_z = .0f;
 
   float mag_buffer[3] = {0};
-  float mag_x, mag_y, mag_z = 0;
-  char ch = 'a';
+  float mag_x, mag_y, mag_z = .0f;
 
   /* USER CODE END 1 */
 
@@ -110,20 +109,21 @@ int main(void)
       gyro_x = gyro_buffer[0];
       gyro_y = gyro_buffer[1];
       gyro_z = gyro_buffer[2];
-      //printf("%7.3f,%7.3f,%7.3f,GDEG\r\n", gyro_x, gyro_y, gyro_z);
-      HAL_UART_Transmit(&huart1,&ch , 1, 1);
+      printf("%8.5f,%10.5f,%10.5f, G\n", gyro_x, gyro_y, gyro_z);
 
       BSP_ACCELERO_GetXYZ(acc_buffer);
       acc_x = acc_buffer[1];
       acc_y = -acc_buffer[0];
       acc_z = acc_buffer[2];
+      printf("%8.5f,%10.5f,%10.5f, A\n", acc_x, acc_y, acc_z);
 
       BSP_MAGNITO_GetXYZ(mag_buffer);
       mag_x = mag_buffer[1];
       mag_y = -mag_buffer[0];
       mag_z = mag_buffer[2];
+      printf("%8.5f,%10.5f,%10.5f, M\n\n", mag_x, mag_y, mag_z);
 
-      HAL_Delay(1000);
+      HAL_Delay(500);
   }
   /* USER CODE END 3 */
 
@@ -229,13 +229,13 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void tty_outc( char ch )
 {
-  HAL_UART_Transmit(&huart1, &ch, 1, 1);
+  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 1);
 }
 
 char tty_inc()
 {
-  char ch;
-  HAL_UART_Receive(&huart1, &ch, 1, 1);
+  char ch = 'e';
+  //HAL_UART_Receive(&huart1, (uint8_t *)&ch, 1, 1);
   return ch;
 }
 /* USER CODE END 4 */

@@ -75,7 +75,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
   if(huart->Instance==USART1)
   {
   /* USER CODE BEGIN USART1_MspInit 0 */
-
+    __HAL_RCC_GPIOC_CLK_ENABLE();
   /* USER CODE END USART1_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_USART1_CLK_ENABLE();
