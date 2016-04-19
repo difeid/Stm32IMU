@@ -39,12 +39,17 @@
 #include "stm32f3_discovery_gyroscope.h"
 #include "stm32f3_discovery_magnitometer.h"
 #include "stm32f3_discovery_accelerometer.h"
+
+#include "imu_util.h"
+#include "MadgwickAHRS.h"
+#include "MadgwickFullAHRS.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
+uint8_t UserButtonPressed = 0;
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE END PV */
 
@@ -54,8 +59,8 @@ static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN PFP */
+void ReadSensors(float a[], float m[], float g[]);
 /* Private function prototypes -----------------------------------------------*/
-
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -65,15 +70,12 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  float gyro_buffer[3] = {0};
-  float gyro_x,gyro_y,gyro_z = .0f;
-
-  float acc_buffer[3] = {0};
-  float acc_x, acc_y, acc_z = .0f;
-
-  float mag_buffer[3] = {0};
-  float mag_x, mag_y, mag_z = .0f;
-
+  uint32_t tb1, tb2;
+  float samplePeriod;
+  //float xmax = 0, xmin = 0, ymax = 0, ymin = 0, zmax = 0, zmin = 0;
+  float quaternion[4] = { 1.0f, .0f, .0f, .0f };
+  float a[3], m[3], g[3];
+  float gdeg[3];
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -94,6 +96,9 @@ int main(void)
   BSP_ACCELERO_Init();
   BSP_MAGNITO_Init();
   BSP_LED_Init(LED_GREEN);
+  BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
+
+  tb1 = HAL_GetTick();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,26 +108,23 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+      ReadSensors(a,m,g);
+
+      tb2 = HAL_GetTick();
+      samplePeriod = (float)(tb2 - tb1);
+      tb1 = tb2;
+      printf("%f,  %d\n",samplePeriod, UserButtonPressed);
+      gdeg[0] = g[0];
+      gdeg[1] = g[1];
+      gdeg[2] = g[2];
+      imuDegToRadV3(g);
+
+      //MadgwickAHRSupdate( g, a, m, samplePeriod, quaternion );
+      //MadgwickFullAHRSUpdate( g, a, m, samplePeriod, quaternion );
+      MadgwickAHRSupdateIMU(g, a, samplePeriod, quaternion);
+
       BSP_LED_Toggle(LED_GREEN);
-
-      BSP_GYRO_GetXYZ(gyro_buffer);
-      gyro_x = gyro_buffer[0];
-      gyro_y = gyro_buffer[1];
-      gyro_z = gyro_buffer[2];
-      printf("%8.5f,%10.5f,%10.5f, G\n", gyro_x, gyro_y, gyro_z);
-
-      BSP_ACCELERO_GetXYZ(acc_buffer);
-      acc_x = acc_buffer[1];
-      acc_y = -acc_buffer[0];
-      acc_z = acc_buffer[2];
-      printf("%8.5f,%10.5f,%10.5f, A\n", acc_x, acc_y, acc_z);
-
-      BSP_MAGNITO_GetXYZ(mag_buffer);
-      mag_x = mag_buffer[1];
-      mag_y = -mag_buffer[0];
-      mag_z = mag_buffer[2];
-      printf("%8.5f,%10.5f,%10.5f, M\n\n", mag_x, mag_y, mag_z);
-
+      printf("%8.5f,%10.5f,%10.5f,%10.5f Q\n", quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
       HAL_Delay(500);
   }
   /* USER CODE END 3 */
@@ -227,6 +229,47 @@ void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void ReadSensors(float a[], float m[], float g[])
+{
+  float buffer[3] = {0};
+
+  BSP_ACCELERO_GetXYZ(buffer);
+  a[0] = buffer[1];
+  a[1] = -buffer[0];
+  a[2] = buffer[2];
+  //printf("%8.5f,%10.5f,%10.5f, A\n", a[0], a[1], a[2]);
+
+  BSP_MAGNITO_GetXYZ(buffer);
+  m[0] = buffer[1];
+  m[1] = -buffer[0];
+  m[2] = buffer[2];
+  //printf("%8.5f,%10.5f,%10.5f, M\n\n", m[0], m[1], m[2]);
+
+  BSP_GYRO_GetXYZ(buffer);
+  g[0] = buffer[0];
+  g[1] = buffer[1];
+  g[2] = buffer[2];
+  //printf("%8.5f,%10.5f,%10.5f, G\n", g[0], g[1], g[2]);
+}
+
+/**
+  * @brief EXTI line detection callbacks
+  * @param GPIO_Pin: Specifies the pins connected EXTI line
+  * @retval None
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(GPIO_Pin==USER_BUTTON_PIN)
+  {
+    UserButtonPressed++;
+    if (UserButtonPressed > 10)
+    {
+      UserButtonPressed = 0;
+    }
+  }
+}
+
+// printf to UART (syscalls.c)
 void tty_outc( char ch )
 {
   HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 1);
