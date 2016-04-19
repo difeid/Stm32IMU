@@ -59,7 +59,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN PFP */
-void ReadSensors(float a[], float m[], float g[]);
+void ReadSensors(float *g, float *a, float *m);
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE END PFP */
 
@@ -72,10 +72,9 @@ int main(void)
   /* USER CODE BEGIN 1 */
   uint32_t tb1, tb2;
   float samplePeriod;
-  //float xmax = 0, xmin = 0, ymax = 0, ymin = 0, zmax = 0, zmin = 0;
+  float g[3], a[3], m[3];
   float quaternion[4] = { 1.0f, .0f, .0f, .0f };
-  float a[3], m[3], g[3];
-  float gdeg[3];
+  float ypr[3] = {.0f};
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -103,29 +102,90 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
+  while(1)
   {
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-      ReadSensors(a,m,g);
+      ReadSensors(g, a, m);
 
       tb2 = HAL_GetTick();
-      samplePeriod = (float)(tb2 - tb1);
+      samplePeriod = (float)(0.001f * (tb2 - tb1));
       tb1 = tb2;
-      printf("%f,  %d\n",samplePeriod, UserButtonPressed);
-      gdeg[0] = g[0];
-      gdeg[1] = g[1];
-      gdeg[2] = g[2];
-      imuDegToRadV3(g);
 
-      //MadgwickAHRSupdate( g, a, m, samplePeriod, quaternion );
-      //MadgwickFullAHRSUpdate( g, a, m, samplePeriod, quaternion );
-      MadgwickAHRSupdateIMU(g, a, samplePeriod, quaternion);
+      switch(UserButtonPressed)
+	{
+	case 0:
+	  {
+	    printf (
+		"G %7.3f,%7.3f,%7.3f\nA %7.3f,%7.3f,%7.3f\nM %7.3f,%7.3f,%7.3f\n\n",
+		g[0], g[1], g[2],
+		a[0], a[1], a[2],
+		m[0], m[1], m[2]);
+	    break;
+	  }
+	case 1:
+	  {
+	    imuDegToRadV3(g);
+	    MadgwickAHRSupdateIMU(g, a, samplePeriod, quaternion);
+	    printf("Q1 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
+		   quaternion[0], quaternion[1], quaternion[2], quaternion[3],
+		   (int)(1.0f / samplePeriod));
+	    imuQuaternionToYawPitchRoll(quaternion, ypr);
+	    imuRadToDegV3(ypr);
+	    printf("YPR %4.0f,%4.0f,%4.0f\n", ypr[0], ypr[1], ypr[2]);
+	    imuQuaternionToEulerAerospace(quaternion, ypr);
+	    imuRadToDegV3(ypr);
+	    printf("ELR %4.0f,%4.0f,%4.0f\n\n", ypr[0], ypr[1], ypr[2]);
+	    break;
+	  }
+	case 2:
+	  {
+	    imuDegToRadV3 (g);
+	    MadgwickAHRSupdate (g, a, m, samplePeriod, quaternion);
+	    printf("Q2 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
+		   quaternion[0], quaternion[1], quaternion[2], quaternion[3],
+		   (int)(1.0f / samplePeriod));
+	    imuQuaternionToYawPitchRoll(quaternion, ypr);
+	    imuRadToDegV3(ypr);
+	    printf("YPR %4.0f,%4.0f,%4.0f\n", ypr[0], ypr[1], ypr[2]);
+	    imuQuaternionToEulerAerospace(quaternion, ypr);
+	    imuRadToDegV3(ypr);
+	    printf("ELR %4.0f,%4.0f,%4.0f\n\n", ypr[0], ypr[1], ypr[2]);
+	    break;
+	  }
+	case 3:
+	  {
+	    imuDegToRadV3(g);
+	    MadgwickFullAHRSUpdate(g, a, m, samplePeriod, quaternion);
+	    printf("Q3 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
+		   quaternion[0], quaternion[1], quaternion[2], quaternion[3],
+		   (int)(1.0f / samplePeriod));
+	    imuQuaternionToYawPitchRoll(quaternion, ypr);
+	    imuRadToDegV3(ypr);
+	    printf("YPR %4.0f,%4.0f,%4.0f\n", ypr[0], ypr[1], ypr[2]);
+	    imuQuaternionToEulerAerospace(quaternion, ypr);
+	    imuRadToDegV3(ypr);
+	    printf("ELR %4.0f,%4.0f,%4.0f\n\n", ypr[0], ypr[1], ypr[2]);
+	    break;
+	  }
+	case 4:
+	  {
+	    imuNormalizeV3(a);
+	    imuNormalizeV3(m);
+	    printf("PGH%4.0f,%4.0f,%4.0f,%4.0f\n",
+		   RAD2DEG(imuPitch(a[0], a[1], a[2])),
+		   RAD2DEG(imuRoll(a[0], a[1], a[2])),
+		   RAD2DEG(imuHeading(m[0], m[1], m[2])),
+		   RAD2DEG(imuHeadingTiltCompensated(m[0], m[1], m[2], a[0], a[1], a[2])));
+	    break;
+	  }
+	default:
+	  UserButtonPressed = 0;
+	}
 
       BSP_LED_Toggle(LED_GREEN);
-      printf("%8.5f,%10.5f,%10.5f,%10.5f Q\n", quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
-      HAL_Delay(500);
+      HAL_Delay(100);
   }
   /* USER CODE END 3 */
 
@@ -229,27 +289,24 @@ void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void ReadSensors(float a[], float m[], float g[])
+void ReadSensors(float *g, float *a, float *m)
 {
-  float buffer[3] = {0};
-
-  BSP_ACCELERO_GetXYZ(buffer);
-  a[0] = buffer[1];
-  a[1] = -buffer[0];
-  a[2] = buffer[2];
-  //printf("%8.5f,%10.5f,%10.5f, A\n", a[0], a[1], a[2]);
-
-  BSP_MAGNITO_GetXYZ(buffer);
-  m[0] = buffer[1];
-  m[1] = -buffer[0];
-  m[2] = buffer[2];
-  //printf("%8.5f,%10.5f,%10.5f, M\n\n", m[0], m[1], m[2]);
+  float buffer[3] = {.0f};
 
   BSP_GYRO_GetXYZ(buffer);
   g[0] = buffer[0];
   g[1] = buffer[1];
   g[2] = buffer[2];
-  //printf("%8.5f,%10.5f,%10.5f, G\n", g[0], g[1], g[2]);
+
+  BSP_ACCELERO_GetXYZ(buffer);
+  a[0] = buffer[1];
+  a[1] = -buffer[0];
+  a[2] = buffer[2];
+
+  BSP_MAGNITO_GetXYZ(buffer);
+  m[0] = buffer[1];
+  m[1] = -buffer[0];
+  m[2] = buffer[2];
 }
 
 /**
@@ -262,7 +319,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   if(GPIO_Pin==USER_BUTTON_PIN)
   {
     UserButtonPressed++;
-    if (UserButtonPressed > 10)
+    if (UserButtonPressed > 4)
     {
       UserButtonPressed = 0;
     }
