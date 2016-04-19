@@ -21,7 +21,7 @@ void imuQuaternionToEuler(float q[4], float angles[3])
     angles[2] = atan2f(2 * (q[0] * q[3] - q[1] * q[2]), 1 - 2 * (q[2] * q[2] + q[3] * q[3])); // psi
 }
 
-
+#if 0
 // Converts quaternion to Y/P/R angles
 // result in radians
 // *** not correct!
@@ -33,7 +33,7 @@ void imuQuaternionToGravity(float q[4], float g[3])
     g[2] = q[0]*q[0] - q[1]*q[1] - q[2]*q[2] + q[3]*q[3];
 }
 
-#if 0
+
 // Converts quaternion to Y/P/R angles
 // result in radians
 // alternate - not verified
