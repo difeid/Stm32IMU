@@ -126,54 +126,40 @@ int main(void)
 	  }
 	case 1:
 	  {
-	    imuDegToRadV3(g);
-	    MadgwickAHRSupdateIMU(g, a, samplePeriod, quaternion);
-	    printf("Q1 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
-		   quaternion[0], quaternion[1], quaternion[2], quaternion[3],
-		   (int)(1.0f / samplePeriod));
-	    imuQuaternionToYawPitchRoll(quaternion, ypr);
-	    imuRadToDegV3(ypr);
-	    printf("YPR %4.0f,%4.0f,%4.0f\n", ypr[0], ypr[1], ypr[2]);
-	    imuQuaternionToEulerAerospace(quaternion, ypr);
-	    imuRadToDegV3(ypr);
-	    printf("ELR %4.0f,%4.0f,%4.0f\n\n", ypr[0], ypr[1], ypr[2]);
+	    printf("1\n");
 	    break;
 	  }
 	case 2:
 	  {
 	    imuDegToRadV3 (g);
+	    imuNormalizeV3(m);
 	    MadgwickAHRSupdate (g, a, m, samplePeriod, quaternion);
-	    printf("Q2 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
+	    /*printf("Q2 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
 		   quaternion[0], quaternion[1], quaternion[2], quaternion[3],
-		   (int)(1.0f / samplePeriod));
+		   (int)(1.0f / samplePeriod));*/
 	    imuQuaternionToYawPitchRoll(quaternion, ypr);
 	    imuRadToDegV3(ypr);
-	    printf("YPR %4.0f,%4.0f,%4.0f\n", ypr[0], ypr[1], ypr[2]);
-	    imuQuaternionToEulerAerospace(quaternion, ypr);
-	    imuRadToDegV3(ypr);
-	    printf("ELR %4.0f,%4.0f,%4.0f\n\n", ypr[0], ypr[1], ypr[2]);
+	    printf("YPR %7.1f,%7.1f,%7.1f\n", ypr[0], ypr[1], ypr[2]);
 	    break;
 	  }
 	case 3:
 	  {
 	    imuDegToRadV3(g);
+	    imuNormalizeV3(m);
 	    MadgwickFullAHRSUpdate(g, a, m, samplePeriod, quaternion);
-	    printf("Q3 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
+	    /*printf("Q3 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
 		   quaternion[0], quaternion[1], quaternion[2], quaternion[3],
-		   (int)(1.0f / samplePeriod));
+		   (int)(1.0f / samplePeriod));*/
 	    imuQuaternionToYawPitchRoll(quaternion, ypr);
 	    imuRadToDegV3(ypr);
-	    printf("YPR %4.0f,%4.0f,%4.0f\n", ypr[0], ypr[1], ypr[2]);
-	    imuQuaternionToEulerAerospace(quaternion, ypr);
-	    imuRadToDegV3(ypr);
-	    printf("ELR %4.0f,%4.0f,%4.0f\n\n", ypr[0], ypr[1], ypr[2]);
+	    printf("YPR %7.1f,%7.1f,%7.1f\n", ypr[0], ypr[1], ypr[2]);
 	    break;
 	  }
 	case 4:
 	  {
 	    imuNormalizeV3(a);
 	    imuNormalizeV3(m);
-	    printf("PGH%4.0f,%4.0f,%4.0f,%4.0f\n",
+	    printf("PGH%5.1f,%5.1f,%7.1f,%7.1f\n",
 		   RAD2DEG(imuPitch(a[0], a[1], a[2])),
 		   RAD2DEG(imuRoll(a[0], a[1], a[2])),
 		   RAD2DEG(imuHeading(m[0], m[1], m[2])),
@@ -185,7 +171,7 @@ int main(void)
 	}
 
       BSP_LED_Toggle(LED_GREEN);
-      HAL_Delay(100);
+      HAL_Delay(1);
   }
   /* USER CODE END 3 */
 
@@ -294,19 +280,19 @@ void ReadSensors(float *g, float *a, float *m)
   float buffer[3] = {.0f};
 
   BSP_GYRO_GetXYZ(buffer);
-  g[0] = buffer[0];
-  g[1] = buffer[1];
-  g[2] = buffer[2];
+  g[0] = buffer[1];
+  g[1] = buffer[0];
+  g[2] = -buffer[2];
 
   BSP_ACCELERO_GetXYZ(buffer);
-  a[0] = buffer[1];
-  a[1] = -buffer[0];
+  a[0] = buffer[0];
+  a[1] = -buffer[1];
   a[2] = buffer[2];
 
   BSP_MAGNITO_GetXYZ(buffer);
-  m[0] = buffer[1];
-  m[1] = -buffer[0];
-  m[2] = buffer[2];
+  m[0] = -buffer[0];
+  m[1] = buffer[1];
+  m[2] = -buffer[2];
 }
 
 /**
