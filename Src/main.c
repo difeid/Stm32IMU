@@ -75,6 +75,8 @@ int main(void)
   float g[3], a[3], m[3];
   float quaternion[4] = { 1.0f, .0f, .0f, .0f };
   float ypr[3] = {.0f};
+  float speed[2] = { .0f };
+  float per[2] = { .0f };
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -126,33 +128,38 @@ int main(void)
 	  }
 	case 1:
 	  {
-	    printf("1\n");
+	    for(uint8_t i = 0; i < 2; i++)
+	      {
+		a[i] = a[i] * 9.81f;
+	        speed[i] += a[i] * samplePeriod;
+	        per[i] += speed[i] * samplePeriod;
+	      }
+	    printf("S %5.1f,%5.1f P %5.1f,%5.1f\n",
+		   speed[0], speed[1], per[0], per[1]);
 	    break;
 	  }
 	case 2:
 	  {
 	    imuDegToRadV3 (g);
-	    imuNormalizeV3(m);
 	    MadgwickAHRSupdate (g, a, m, samplePeriod, quaternion);
 	    /*printf("Q2 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
 		   quaternion[0], quaternion[1], quaternion[2], quaternion[3],
 		   (int)(1.0f / samplePeriod));*/
 	    imuQuaternionToYawPitchRoll(quaternion, ypr);
 	    imuRadToDegV3(ypr);
-	    printf("YPR %7.1f,%7.1f,%7.1f\n", ypr[0], ypr[1], ypr[2]);
+	    printf("YPR %7.1f,%7.1f,%7.1f,%4dHz\n", ypr[0], ypr[1], ypr[2], (int)(1.0f / samplePeriod));
 	    break;
 	  }
 	case 3:
 	  {
 	    imuDegToRadV3(g);
-	    imuNormalizeV3(m);
 	    MadgwickFullAHRSUpdate(g, a, m, samplePeriod, quaternion);
 	    /*printf("Q3 %6.3f,%6.3f,%6.3f,%6.3f,%3dHz\n",
 		   quaternion[0], quaternion[1], quaternion[2], quaternion[3],
 		   (int)(1.0f / samplePeriod));*/
 	    imuQuaternionToYawPitchRoll(quaternion, ypr);
 	    imuRadToDegV3(ypr);
-	    printf("YPR %7.1f,%7.1f,%7.1f\n", ypr[0], ypr[1], ypr[2]);
+	    printf("YPR %7.1f,%7.1f,%7.1f%,4dHz\n", ypr[0], ypr[1], ypr[2], (int)(1.0f / samplePeriod));
 	    break;
 	  }
 	case 4:
@@ -170,8 +177,8 @@ int main(void)
 	  UserButtonPressed = 0;
 	}
 
-      BSP_LED_Toggle(LED_GREEN);
-      HAL_Delay(1);
+      //BSP_LED_Toggle(LED_GREEN);
+      //HAL_Delay(10);
   }
   /* USER CODE END 3 */
 
