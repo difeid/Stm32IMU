@@ -110,8 +110,8 @@ uint8_t BSP_MAGNITO_Init(void)
   /* MEMS configuration ------------------------------------------------------*/
     /* Configure MEMS magnetometer main parameters: temp, working mode, full Scale and Data rate */
     LSM303DLHC_InitStructure.Temperature_Sensor = LSM303DLHC_TEMPSENSOR_DISABLE;
-    LSM303DLHC_InitStructure.MagOutput_DataRate =LSM303DLHC_ODR_75_HZ;
-    LSM303DLHC_InitStructure.MagFull_Scale = LSM303DLHC_FS_2_5_GA;
+    LSM303DLHC_InitStructure.MagOutput_DataRate =LSM303DLHC_ODR_220_HZ;
+    LSM303DLHC_InitStructure.MagFull_Scale = LSM303DLHC_FS_1_9_GA;
     LSM303DLHC_InitStructure.Working_Mode = LSM303DLHC_CONTINUOS_CONVERSION;
     LSM303DLHC_MagInit(&LSM303DLHC_InitStructure);
 

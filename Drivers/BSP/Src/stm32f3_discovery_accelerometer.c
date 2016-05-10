@@ -116,7 +116,7 @@ uint8_t BSP_ACCELERO_Init(void)
   /* MEMS configuration ------------------------------------------------------*/
    /* Fill the accelerometer structure */
     LSM303DLHC_InitStructure.Power_Mode = LSM303DLHC_NORMAL_MODE;
-    LSM303DLHC_InitStructure.AccOutput_DataRate = LSM303DLHC_ODR_100_HZ;
+    LSM303DLHC_InitStructure.AccOutput_DataRate = LSM303DLHC_ODR_200_HZ;
     LSM303DLHC_InitStructure.Axes_Enable= LSM303DLHC_AXES_ENABLE;
     LSM303DLHC_InitStructure.AccFull_Scale = LSM303DLHC_FULLSCALE_4G;
     LSM303DLHC_InitStructure.BlockData_Update = LSM303DLHC_BlockUpdate_Continous;
